@@ -1,0 +1,117 @@
+classDiagram
+    direction LR
+
+    class Usuario {
+        <<abstract>>
+        -Long id
+        -String login
+        -String senha
+        -Perfil perfil
+        -LocalDateTime criadoEm
+        +getNomeExibicao() String
+    }
+
+    class Cliente {
+        -String rg
+        -String cpf
+        -String nome
+        -String endereco
+        -String profissao
+        +definirRendimentos(List~Rendimento~)
+        +getRendaTotal() BigDecimal
+    }
+
+    class Agente {
+        -String nome
+        -String cnpj
+        -TipoAgente tipo
+        +isBanco() boolean
+    }
+
+    class Rendimento {
+        -Long id
+        -String entidadeEmpregadora
+        -BigDecimal valor
+    }
+
+    class Automovel {
+        -Long id
+        -String matricula
+        -Integer ano
+        -String marca
+        -String modelo
+        -String placa
+        -TipoProprietario tipoProprietario
+        -boolean disponivel
+        +registrarPropriedade(TipoProprietario, Usuario)
+    }
+
+    class PedidoAluguel {
+        -Long id
+        -LocalDate dataInicio
+        -LocalDate dataFim
+        -String observacoes
+        -boolean solicitaCredito
+        -BigDecimal valorCreditoSolicitado
+        -StatusPedido status
+        -String parecer
+        -LocalDateTime criadoEm
+        +validarPeriodo()
+        +garantirModificavelPeloCliente()
+        +garantirModificavelPeloAgente()
+        +cancelar()
+        +avaliar(Agente, boolean, String)
+        +marcarComoContratado()
+        +getQuantidadeDias() long
+    }
+
+    class Contrato {
+        -Long id
+        -TipoProprietario tipoProprietario
+        -LocalDateTime dataAssinatura
+    }
+
+    class ContratoCredito {
+        -Long id
+        -BigDecimal valor
+        -BigDecimal taxaJurosMensal
+        -Integer numeroParcelas
+        +getValorParcela() BigDecimal
+    }
+
+    class Perfil {
+        <<enumeration>>
+        CLIENTE
+        AGENTE
+    }
+    class TipoAgente {
+        <<enumeration>>
+        EMPRESA
+        BANCO
+    }
+    class TipoProprietario {
+        <<enumeration>>
+        CLIENTE
+        EMPRESA
+        BANCO
+    }
+    class StatusPedido {
+        <<enumeration>>
+        PENDENTE
+        APROVADO
+        REPROVADO
+        CANCELADO
+        CONTRATADO
+    }
+
+    Usuario <|-- Cliente
+    Usuario <|-- Agente
+    Cliente "1" *-- "0..3" Rendimento : aufere
+    Cliente "1" -- "0..*" PedidoAluguel : introduz
+    PedidoAluguel "0..*" --> "1" Automovel : refere-se a
+    Agente "0..1" <-- "0..*" PedidoAluguel : avaliado por
+    PedidoAluguel "1" -- "0..1" Contrato : gera
+    Contrato "0..*" --> "1" Agente : executado por
+    Contrato "1" *-- "0..1" ContratoCredito : associado a
+    ContratoCredito "0..*" --> "1" Agente : concedido por (banco)
+    Automovel "0..*" --> "0..1" Usuario : proprietário

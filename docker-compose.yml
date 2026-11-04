@@ -1,0 +1,39 @@
+# Execução local completa (alternativa ao Supabase): PostgreSQL + API + Front-end.
+# Para usar o Supabase, remova o serviço "db" e aponte SPRING_DATASOURCE_* para o projeto Supabase.
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: aluguel_carros
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/aluguel_carros
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      JWT_SECRET: troque-este-segredo
+      CORS_ORIGENS: http://localhost:5173
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: http://localhost:8080/api
+    depends_on:
+      - backend
+    ports:
+      - "5173:80"
+
+volumes:
+  pgdata:

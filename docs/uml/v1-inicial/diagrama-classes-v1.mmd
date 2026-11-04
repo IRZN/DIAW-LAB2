@@ -1,0 +1,51 @@
+%% Versão 1 (modelagem inicial, antes da implementação) — mantida para comparação
+classDiagram
+    class Usuario {
+        -String login
+        -String senha
+    }
+    class Cliente {
+        -String rg
+        -String cpf
+        -String nome
+        -String endereco
+        -String profissao
+        -String[] empregadores
+        -double[] rendimentos
+    }
+    class Agente {
+        -String nome
+    }
+    class Empresa
+    class Banco
+    class Automovel {
+        -String matricula
+        -int ano
+        -String marca
+        -String modelo
+        -String placa
+    }
+    class Pedido {
+        -Date data
+        -String status
+        +introduzir()
+        +modificar()
+        +cancelar()
+        +avaliar()
+    }
+    class Contrato {
+        -String tipo
+    }
+    class ContratoCredito {
+        -double valor
+    }
+
+    Usuario <|-- Cliente
+    Usuario <|-- Agente
+    Agente <|-- Empresa
+    Agente <|-- Banco
+    Cliente "1" -- "*" Pedido
+    Pedido "*" -- "1" Automovel
+    Pedido "1" -- "0..1" Contrato
+    Contrato "1" -- "0..1" ContratoCredito
+    Banco "1" -- "*" ContratoCredito

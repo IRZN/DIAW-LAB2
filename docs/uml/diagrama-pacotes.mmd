@@ -1,0 +1,45 @@
+flowchart TB
+    subgraph WEB["📦 Subsistema: Construção dinâmica das páginas web (frontend · React + Vite) — VIEW"]
+        direction LR
+        pages["📦 pages"]
+        components["📦 components"]
+        context["📦 context"]
+        services_fe["📦 services (api.js)"]
+        utils["📦 utils"]
+        pages --> components
+        pages --> context
+        pages --> services_fe
+        pages --> utils
+        context --> services_fe
+    end
+
+    subgraph API["📦 Subsistema: Gestão de pedidos e contratos (backend · Spring Boot)"]
+        direction TB
+        controller["📦 controller (CONTROLLER)"]
+        dto["📦 dto"]
+        service["📦 service (MODEL · regras de negócio)"]
+        repository["📦 repository"]
+        model["📦 model + model.enums (MODEL · entidades JPA)"]
+        security["📦 security"]
+        config["📦 config"]
+        exception["📦 exception"]
+
+        controller --> dto
+        controller --> service
+        controller --> security
+        service --> repository
+        service --> model
+        service --> dto
+        service --> exception
+        service --> security
+        repository --> model
+        dto --> model
+        config --> security
+        config --> repository
+        model --> exception
+    end
+
+    DB[("🗄️ Supabase · PostgreSQL")]
+
+    services_fe -- "HTTP/JSON + JWT" --> controller
+    repository -- "JPA / JDBC" --> DB

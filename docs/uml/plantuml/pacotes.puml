@@ -1,0 +1,48 @@
+@startuml pacotes
+title Sistema de Aluguel de Carros — Diagrama de Pacotes (Visão Lógica)
+skinparam packageStyle folder
+
+package "frontend (React + Vite) — Subsistema de construção dinâmica das páginas web [VIEW]" as FE {
+  package pages
+  package components
+  package context
+  package "services" as fesvc
+  package utils
+}
+pages ..> components
+pages ..> context
+pages ..> fesvc
+pages ..> utils
+context ..> fesvc
+
+package "br.pucminas.aluguelcarros (Spring Boot) — Subsistema de gestão de pedidos e contratos" as BE {
+  package controller <<Controller>>
+  package dto
+  package service <<Model>>
+  package repository
+  package model <<Model>> {
+    package enums
+  }
+  package security
+  package config
+  package exception
+}
+
+controller ..> service
+controller ..> dto
+controller ..> security
+service ..> repository
+service ..> model
+service ..> dto
+service ..> exception
+service ..> security
+repository ..> model
+dto ..> model
+config ..> security
+config ..> repository
+model ..> exception
+
+database "Supabase (PostgreSQL)" as DB
+fesvc ..> controller : HTTP/JSON + JWT
+repository ..> DB : JPA/JDBC
+@enduml

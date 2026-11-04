@@ -1,0 +1,52 @@
+%% Diagrama de Casos de Uso (fonte UML formal em plantuml/casos-de-uso.puml)
+flowchart LR
+    Cliente["🧍<br/><b>Cliente</b>"]
+
+    subgraph SIS["Sistema de Aluguel de Carros"]
+        UC01([UC01 · Realizar cadastro])
+        UC02([UC02 · Efetuar login])
+        UC06([UC06 · Consultar pedidos e status])
+        UC03([UC03 · Manter cadastro de cliente])
+        UC04([UC04 · Introduzir pedido])
+        UC07([UC07 · Cancelar pedido])
+        UC05([UC05 · Modificar pedido])
+        UC08([UC08 · Avaliar pedido<br/>análise financeira])
+        UC12([UC12 · Consultar clientes])
+        UC09([UC09 · Executar contrato])
+        UC10([UC10 · Conceder contrato de crédito])
+        UC11([UC11 · Manter automóveis])
+    end
+
+    Agente["🏢<br/><b>Agente</b>"]
+    Empresa["🏢<br/>Empresa"]
+    Banco["🏦<br/>Banco"]
+
+    Cliente --- UC01
+    Cliente --- UC02
+    Cliente --- UC06
+    Cliente --- UC03
+    Cliente --- UC04
+    Cliente --- UC05
+    Cliente --- UC07
+
+    UC01 --- Agente
+    UC02 --- Agente
+    UC06 --- Agente
+    UC05 --- Agente
+    UC08 --- Agente
+    UC09 --- Agente
+    UC11 --- Agente
+    UC12 --- Agente
+    UC10 --- Banco
+
+    UC10 -. "«extend»" .-> UC09
+    UC08 -. "«include»" .-> UC12
+
+    Agente --- Empresa
+    Agente --- Banco
+    Empresa -. "generalização" .-> Agente
+    Banco -. "generalização" .-> Agente
+
+    classDef actor fill:#fff,stroke:#0f2a44,stroke-width:2px
+    class Cliente,Agente,Empresa,Banco actor
+    linkStyle 18,19 stroke-width:0px

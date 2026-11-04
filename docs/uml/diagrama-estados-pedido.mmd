@@ -1,0 +1,12 @@
+stateDiagram-v2
+    [*] --> PENDENTE : Cliente introduz pedido
+    PENDENTE --> PENDENTE : Cliente/Agente modifica
+    PENDENTE --> APROVADO : Agente avalia (parecer positivo)
+    PENDENTE --> REPROVADO : Agente avalia (parecer negativo)
+    PENDENTE --> CANCELADO : Cliente cancela
+    APROVADO --> APROVADO : Agente modifica
+    APROVADO --> CANCELADO : Cliente cancela
+    APROVADO --> CONTRATADO : Agente executa contrato\n(+ crédito bancário opcional)
+    REPROVADO --> [*]
+    CANCELADO --> [*]
+    CONTRATADO --> [*]

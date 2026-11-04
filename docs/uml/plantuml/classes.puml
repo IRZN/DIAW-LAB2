@@ -1,0 +1,117 @@
+@startuml classes
+title Sistema de Aluguel de Carros — Diagrama de Classes (pacote model)
+skinparam classAttributeIconSize 0
+hide empty members
+
+abstract class Usuario {
+  - id : Long
+  - login : String
+  - senha : String
+  - perfil : Perfil
+  - criadoEm : LocalDateTime
+  + {abstract} getNomeExibicao() : String
+}
+
+class Cliente {
+  + {static} MAX_RENDIMENTOS : int = 3
+  - rg : String
+  - cpf : String
+  - nome : String
+  - endereco : String
+  - profissao : String
+  + definirRendimentos(novos : List<Rendimento>) : void
+  + getRendaTotal() : BigDecimal
+}
+
+class Agente {
+  - nome : String
+  - cnpj : String
+  - tipo : TipoAgente
+  + isBanco() : boolean
+}
+
+class Rendimento {
+  - id : Long
+  - entidadeEmpregadora : String
+  - valor : BigDecimal
+}
+
+class Automovel {
+  - id : Long
+  - matricula : String
+  - ano : Integer
+  - marca : String
+  - modelo : String
+  - placa : String
+  - tipoProprietario : TipoProprietario
+  - disponivel : boolean
+  + registrarPropriedade(tipo : TipoProprietario, proprietario : Usuario) : void
+}
+
+class PedidoAluguel {
+  - id : Long
+  - dataInicio : LocalDate
+  - dataFim : LocalDate
+  - observacoes : String
+  - solicitaCredito : boolean
+  - valorCreditoSolicitado : BigDecimal
+  - status : StatusPedido
+  - parecer : String
+  - criadoEm : LocalDateTime
+  - atualizadoEm : LocalDateTime
+  + validarPeriodo() : void
+  + garantirModificavelPeloCliente() : void
+  + garantirModificavelPeloAgente() : void
+  + cancelar() : void
+  + avaliar(agente : Agente, positivo : boolean, parecer : String) : void
+  + marcarComoContratado() : void
+  + getQuantidadeDias() : long
+}
+
+class Contrato {
+  - id : Long
+  - tipoProprietario : TipoProprietario
+  - dataAssinatura : LocalDateTime
+}
+
+class ContratoCredito {
+  - id : Long
+  - valor : BigDecimal
+  - taxaJurosMensal : BigDecimal
+  - numeroParcelas : Integer
+  + getValorParcela() : BigDecimal
+}
+
+enum Perfil {
+  CLIENTE
+  AGENTE
+}
+enum TipoAgente {
+  EMPRESA
+  BANCO
+}
+enum TipoProprietario {
+  CLIENTE
+  EMPRESA
+  BANCO
+}
+enum StatusPedido {
+  PENDENTE
+  APROVADO
+  REPROVADO
+  CANCELADO
+  CONTRATADO
+}
+
+Usuario <|-- Cliente
+Usuario <|-- Agente
+Cliente "1" *-- "0..3" Rendimento : aufere >
+Cliente "1" -- "0..*" PedidoAluguel : introduz >
+PedidoAluguel "0..*" --> "1" Automovel
+PedidoAluguel "0..*" --> "0..1" Agente : avaliado por >
+PedidoAluguel "1" -- "0..1" Contrato : gera >
+Contrato "0..*" --> "1" Agente : executado por >
+Contrato "1" *-- "0..1" ContratoCredito
+ContratoCredito "0..*" --> "1" Agente : concedido por (banco) >
+Automovel "0..*" --> "0..1" Usuario : proprietário >
+@enduml
