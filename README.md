@@ -438,9 +438,6 @@ Ferramenta: **JUnit 5** (via `spring-boot-starter-test`). Cobrem as regras de do
 |---|---|---|---|
 | Iury Emanuel Alves da Silva | [@IRZN](https://github.com/IRZN) | [LinkedIn](https://www.linkedin.com/in/iury-emanuel-127b7b2b5) | [iuryemanuel220@gmail.com](mailto:iuryemanuel220@gmail.com) |
 
-> [!TIP]
-> 💡 Adicione uma foto profissional de cada integrante na tabela.
-
 ---
 
 ## 🤝 Contribuição
